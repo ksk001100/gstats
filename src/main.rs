@@ -8,23 +8,41 @@ use reqwest;
 struct Release {
     url: String,
     tag_name: String,
-    assets: Vec<ReleaseAssets>,
+    assets: Vec<Asset>,
 }
 
 #[derive(Serialize, Deserialize)]
-struct ReleaseAssets {
+struct Asset {
     download_count: u32,
 }
 
-fn release_download_count(data: String) -> Result<()> {
-    let repos: Vec<Release> = serde_json::from_str(&data).unwrap();
-    let mut total_count = 0;
-    for repo in repos {
-        let count = repo.assets.into_iter().fold(0, |sum, asset| sum + asset.download_count);
-        total_count = total_count + count;
-        println!("{} : {}", repo.tag_name, count);
+impl Release {
+    fn download_count(&self) -> u32 {
+        (&self.assets).into_iter().fold(0, |sum, asset| sum + asset.download_count)
     }
-    println!("Total : {}", total_count);
+}
+
+type Releases = Vec<Release>;
+
+trait ReleasesMethods {
+    fn stats(&self);
+}
+
+impl ReleasesMethods for Releases {
+    fn stats(&self) {
+        let mut total_count = 0;
+        for release in self {
+            let count = release.download_count();
+            total_count = total_count + count;
+            println!("{} : \x1b[33m{}\x1b[0m", release.tag_name, count);
+        }
+        println!("Total : \x1b[31m{}\x1b[0m", total_count);
+    }
+}
+
+fn release_download_count(data: String) -> Result<()> {
+    let releases: Releases = serde_json::from_str(&data).unwrap();
+    releases.stats();
 
     Ok(())
 }
