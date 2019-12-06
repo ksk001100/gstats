@@ -24,32 +24,42 @@ impl Release {
 
 type Releases = Vec<Release>;
 
-trait ReleasesMethods {
+trait Statistics {
     fn stats(&self);
 }
 
-impl ReleasesMethods for Releases {
+impl Statistics for Releases {
     fn stats(&self) {
         let mut total_count = 0;
         for release in self {
             let count = release.download_count();
             total_count = total_count + count;
-            println!("{} : \x1b[33m{}\x1b[0m", release.tag_name, count);
+            println!("{} : {}", release.tag_name, yellow(count));
         }
-        println!("Total : \x1b[31m{}\x1b[0m", total_count);
+        println!("Total : {}", red(total_count));
     }
 }
 
-fn release_download_count(data: String) -> Result<()> {
-    let releases: Releases = serde_json::from_str(&data).unwrap();
-    releases.stats();
+fn red<T: std::fmt::Display>(t: T) -> String {
+    format!("\x1b[31m{}\x1b[0m", t)
+}
 
-    Ok(())
+fn green<T: std::fmt::Display>(t: T) -> String {
+    format!("\x1b[32m{}\x1b[0m", t)
+}
+
+fn yellow<T: std::fmt::Display>(t: T) -> String {
+    format!("\x1b[33m{}\x1b[0m", t)
+}
+
+fn blue<T: std::fmt::Display>(t: T) -> String {
+    format!("\x1b[34m{}\x1b[0m", t)
 }
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     let url = format!("https://api.github.com/repos/{}/releases", args[1]);
     let mut res = reqwest::get(&url).unwrap();
-    release_download_count(res.text().unwrap()).unwrap();
+    let releases: Releases = serde_json::from_str(&res.text().unwrap()).unwrap();
+    releases.stats();
 }
