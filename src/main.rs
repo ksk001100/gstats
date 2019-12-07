@@ -1,6 +1,8 @@
 mod lib;
+
 use std::env;
-use lib::api;
+
+use lib::github::api;
 use lib::traits::Statistics;
 
 fn main() {
