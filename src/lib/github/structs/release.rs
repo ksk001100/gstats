@@ -54,7 +54,7 @@ pub struct Author {
 
 impl Release {
     pub fn download_count(&self) -> u32 {
-        (&self.assets).into_iter().fold(0, |sum, asset| sum + asset.download_count)
+        (&self.assets).into_iter().fold(0, |s, a| s + a.download_count)
     }
 }
 
