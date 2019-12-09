@@ -21,9 +21,12 @@ impl App {
             _ => (String::new(), String::new())
         };
 
-        if cmd.len() <= 0 || owner_repo.len() <= 0 {
-            self.help();
-            std::process::exit(1);
+        match (cmd.len(), owner_repo.len()) {
+            (0, _) | (_, 0) => {
+                self.help();
+                std::process::exit(1);
+            }
+            _ => ()
         }
 
         match self.select_command(&cmd) {
