@@ -23,7 +23,6 @@ impl App {
 
         if cmd.len() <= 0 || owner_repo.len() <= 0 {
             self.help();
-            eprintln!("{}", color::red("Args error..."));
             std::process::exit(1);
         }
 
