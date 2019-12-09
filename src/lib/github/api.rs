@@ -12,7 +12,7 @@ impl Api {
         Self { token }
     }
 
-    pub fn release(&self, owner_repo: &str) -> Result<Releases, Box<std::error::Error>> {
+    pub fn release(&self, owner_repo: &str) -> Result<Releases, Box<dyn std::error::Error>> {
         let url = format!("https://api.github.com/repos/{}/releases", owner_repo);
         let mut res = reqwest::get(&url).unwrap();
         let releases = serde_json::from_str(&res.text().unwrap())?;

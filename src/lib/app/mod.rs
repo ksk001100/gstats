@@ -1,6 +1,7 @@
 pub mod command;
+pub mod color;
 
-use crate::lib::app::command::Command;
+use command::Command;
 
 pub struct App {
     pub name: String,
@@ -15,34 +16,36 @@ impl App {
     }
 
     pub fn run(&self, args: Vec<String>) {
+        let (cmd, owner_repo) = match args.len() {
+            3 => ((&args[1]).clone(), (&args[2]).clone()),
+            _ => (String::new(), String::new())
+        };
 
-//        let cmd: String = match args.len() {
-//            0 => {
-//                self.help();
-//                std::process::exit(1);
-//                ""
-//            },
-//            2 => args[0].clone(),
-//            _ => ""
-//        };
-        let cmd = (&args[0]).clone();
+        if cmd.len() <= 0 || owner_repo.len() <= 0 {
+            self.help();
+            eprintln!("{}", color::red("Args error..."));
+            std::process::exit(1);
+        }
 
-        let command = self.select_command(cmd);
-        (command.action)(cmd.clone());
+        match self.select_command(&cmd) {
+            Some(command) => (command.action)(owner_repo),
+            None => self.help()
+        }
     }
 
     fn help(&self) {
         println!("NAME:\n   {}\n", self.name);
-        println!("USAGE:\n   {}\n\n", self.usage);
-        println!("VERSION:\n   {}\n\n", self.version);
+        println!("USAGE:\n   {}\n", self.usage);
+        println!("VERSION:\n   {}\n", self.version);
+
+        println!("COMMAND:");
+        for c in &self.commands {
+            println!("   {} {} {}", self.name, c.name, "[Owner/Repo]")
+        }
     }
 
-    fn select_command(&self, cmd: String) -> &Command {
-        (&self.commands)
-            .into_iter()
-            .filter(|command| command.name == cmd)
-            .collect::<Vec<&Command>>()
-            .first()
-            .unwrap()
+    fn select_command(&self, cmd: &String) -> Option<&Command> {
+       (&self.commands).into_iter()
+            .find(|command| &command.name == cmd)
     }
 }

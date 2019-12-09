@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::lib::color;
+use crate::lib::app::color;
 use crate::lib::traits::{Statistics};
 
 #[derive(Serialize, Deserialize)]
