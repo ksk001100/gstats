@@ -9,5 +9,6 @@ $ cargo build --release
 
 ## Usage
 ```bash
-$ gstats KeisukeToyota/gstats
+$ gstats
+$ gstats release KeisukeToyota/gstats
 ```
