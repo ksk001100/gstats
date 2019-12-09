@@ -2,20 +2,26 @@ mod lib;
 
 use std::env;
 
-use lib::app::App;
+use seahorse::{App, color};
+
 use lib::commands;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let app = App::new(
-        "gstats".to_string(),
-        "gstats [command] [Owner/Repo]".to_string(),
-        env!("CARGO_PKG_VERSION").to_string(),
-        vec![
-            commands::release_command()
-        ],
-    );
+    let mut app = App::new();
+
+    app.name = "gstats".to_string();
+    app.display_name = color::magenta("
+     ██████╗ ███████╗████████╗ █████╗ ████████╗███████╗
+    ██╔════╝ ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
+    ██║  ███╗███████╗   ██║   ███████║   ██║   ███████╗
+    ██║   ██║╚════██║   ██║   ██╔══██║   ██║   ╚════██║
+    ╚██████╔╝███████║   ██║   ██║  ██║   ██║   ███████║
+     ╚═════╝ ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝");
+    app.usage = "gstats [command] [Owner/Repo]".to_string();
+    app.version = env!("CARGO_PKG_VERSION").to_string();
+    app.commands = vec![commands::release_command()];
 
     app.run(args.clone());
 }

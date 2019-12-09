@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
+use seahorse::color;
 
-use crate::lib::app::color;
 use crate::lib::traits::{Statistics};
 
 #[derive(Serialize, Deserialize)]

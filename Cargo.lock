@@ -342,6 +342,7 @@ name = "gstats"
 version = "0.1.0"
 dependencies = [
  "reqwest",
+ "seahorse",
  "serde",
  "serde_json",
 ]
@@ -1017,6 +1018,11 @@ name = "scopeguard"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b42e15e59b18a828bbf5c58ea01debb36b9b096346de35d941dcb89009f24a0d"
+
+[[package]]
+name = "seahorse"
+version = "0.1.0"
+source = "git+https://github.com/KeisukeToyota/seahorse.git#54044dcf2d59aceefd7b1fdf3419007fd27b8c83"
 
 [[package]]
 name = "security-framework"
