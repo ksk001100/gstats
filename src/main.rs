@@ -11,7 +11,7 @@ fn main() {
     let app = App::new(
         "gstats".to_string(),
         "gstats [command] [Owner/Repo]".to_string(),
-        "v0.0.1".to_string(),
+        env!("CARGO_PKG_VERSION").to_string(),
         vec![
             commands::release_command()
         ],
