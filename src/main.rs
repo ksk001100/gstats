@@ -8,20 +8,23 @@ use lib::commands;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-
-    let mut app = App::new();
-
-    app.name = "gstats".to_string();
-    app.display_name = color::magenta("
+    let display_name = color::magenta("
      ██████╗ ███████╗████████╗ █████╗ ████████╗███████╗
     ██╔════╝ ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
     ██║  ███╗███████╗   ██║   ███████║   ██║   ███████╗
     ██║   ██║╚════██║   ██║   ██╔══██║   ██║   ╚════██║
     ╚██████╔╝███████║   ██║   ██║  ██║   ██║   ███████║
      ╚═════╝ ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝");
-    app.usage = "gstats [command] [Owner/Repo]".to_string();
-    app.version = env!("CARGO_PKG_VERSION").to_string();
-    app.commands = vec![commands::release_command()];
 
-    app.run(args.clone());
+    let app = App::new()
+        .name("gstats")
+        .display_name(display_name)
+        .usage("gstats [command] [Owner/Repo]")
+        .version(env!("CARGO_PKG_VERSION"))
+        .commands(vec![
+            commands::release_command(),
+            commands::clone_command()
+        ]);
+
+    app.run(args);
 }
