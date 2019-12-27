@@ -12,5 +12,6 @@ $ cargo build --release
 ## Usage
 ```bash
 $ gstats
-$ gstats release KeisukeToyota/gstats
+$ gstats release ksk001100/gstats
+$ gstats clone ksk001100/gstats
 ```
