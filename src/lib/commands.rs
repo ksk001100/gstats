@@ -32,3 +32,18 @@ fn clone_action(args: Vec<String>) {
         Err(_) => eprintln!("{}", color::red("Repository does not exist..."))
     }
 }
+
+pub fn view_command() -> Command {
+    Command::new("view", "gstats view [Owner/Repo]", view_action)
+}
+
+fn view_action(args: Vec<String>) {
+    let owner_repo = args[0].clone();
+    let token = env!("GITHUB_TOKEN");
+    let api = Api::new(token.to_string());
+
+    match api.view(&owner_repo) {
+        Ok(view) => view.stats(),
+        Err(_) => eprintln!("{}", color::red("Repository does not exist..."))
+    }
+}

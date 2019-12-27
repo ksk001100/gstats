@@ -23,7 +23,8 @@ fn main() {
         .version(env!("CARGO_PKG_VERSION"))
         .commands(vec![
             commands::release_command(),
-            commands::clone_command()
+            commands::clone_command(),
+            commands::view_command()
         ]);
 
     app.run(args);

@@ -1,12 +1,19 @@
 use reqwest;
 use serde_json;
-use reqwest::Client;
-use reqwest::header::AUTHORIZATION;
-use reqwest::header::HeaderMap;
-use reqwest::header::HeaderValue;
+use reqwest::{
+    Client,
+    header::{
+        AUTHORIZATION,
+        HeaderMap,
+        HeaderValue,
+    }
+};
 
-use crate::lib::github::structs::release::Releases;
-use crate::lib::github::structs::clone::Clone;
+use crate::lib::github::structs::{
+    release::Releases,
+    clone::Clone,
+    view::View,
+};
 
 pub struct Api {
     client: Client,
@@ -42,5 +49,15 @@ impl Api {
         let clone = serde_json::from_str(&res.text().unwrap())?;
 
         Ok(clone)
+    }
+
+    pub fn view(&self, owner_repo: &str) -> Result<View, Box<dyn std::error::Error>> {
+        let url = format!("https://api.github.com/repos/{}/traffic/views", owner_repo);
+        let mut res = self.client.get(&url)
+            .headers(self.headers())
+            .send()?;
+        let view = serde_json::from_str(&res.text().unwrap())?;
+
+        Ok(view)
     }
 }
